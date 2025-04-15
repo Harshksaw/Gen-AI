@@ -1,0 +1,18 @@
+services:
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ./ollama:/ollama
+
+    restart: unless-stopped
+
+volumes:
+  models:
+    driver: local
+    driver_opts:
+      type: none
+      device: ./models
+      o: bind
