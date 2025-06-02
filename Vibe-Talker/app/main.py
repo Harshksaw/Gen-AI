@@ -1,7 +1,7 @@
 import speech_recognition as sr
 import os
 from langgraph.checkpoint.mongodb import MongoDBSaver
-MONOGODB_URI = os.getenv("MONGODB_URI")
+MONOGODB_URI = "mongodb://admin:admin@localhost:27017/"
 from .graph import create_chat_graph
 def main():
     # Initialize recognizer
@@ -15,6 +15,8 @@ def main():
             print("Please speak something...")
             # Adjust for ambient noise and record audio
             recognizer.adjust_for_ambient_noise(source)
+            recognizer.pause_threshold = 4
+            
             audio = recognizer.listen(source)
             
             sst = recognizer.recognize_google(audio)

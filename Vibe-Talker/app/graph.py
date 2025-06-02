@@ -9,7 +9,7 @@ from langraph.graph.state import tools_condition
 from langraph.llm import init_chat_model
 from langraph.llm import LLM
 from langraph.llm import init_tool_model
-
+from langraph.tool import tool
 
 llm = init_chat_model(
     model_provider = "openai",
@@ -19,12 +19,20 @@ llm = init_chat_model(
 class State(TypedDict):
     messages: Annotated[list, add_messages]
     
-    
+@tool
+def run_command(cmd:str):
+    """Takes a command line prompt and excutes it on the user;s machine and return the output of the command.
+    Example: run_command(cmd="ls") where ls is the command to list the files"""
+   
+llm_with_tool = llm.bind_tools(tool=[run_command])  
     
 def chatbot(state):
-    message - llm.invoke(state['messages'])
+    message = llm.invoke(state['messages'])
     assert len(message.took_calls) <= 1
     return {"messages": [message]}
+
+
+
 
 tool_node = ToolNode(tools = [])
 
